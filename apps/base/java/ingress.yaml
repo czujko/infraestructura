@@ -1,0 +1,16 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: ingress-dso-gke-java
+spec:
+  rules:
+  - host: dso-gke-java.access
+    http:
+      paths:
+          - backend:
+              service:
+                name: svc-dso-gke-java
+                port:
+                  number: 80
+            pathType: ImplementationSpecific
+            

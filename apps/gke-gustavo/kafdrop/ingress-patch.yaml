@@ -1,0 +1,16 @@
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: ingress-kafdrop
+spec:
+  rules:
+    - host: kafdrop.dso-gke-java.access
+      http:
+        paths:
+          - backend:
+              service:
+                name: svc-kafdrop
+                port:
+                  number: 80
+            pathType: ImplementationSpecific

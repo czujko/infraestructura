@@ -1,0 +1,49 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: dp-kafka
+spec:
+  selector:
+    matchLabels:
+      app: kafka
+  template:
+    metadata:
+      labels:
+        app: kafka
+    spec:
+      containers:
+      - name: kafka
+        image: gcr.io/capable-conduit-348311/kafka:latest
+        env:
+          - name: kafka_POD_IP
+            valueFrom:
+              fieldRef:
+                fieldPath: status.podIP
+          - name: kafka_LISTENERS
+            value: "INTERNAL://:29092,EXTERNAL://:9092"
+          - name: kafka_ADVERTISED_LISTENERS
+            value: INTERNAL://$(kafka_POD_IP):29092,EXTERNAL://svc-kafka.svc.cluster.local:9092
+          - name: kafka_LISTENER_SECURITY_PROTOCOL_MAP
+            value: INTERNAL:PLAINTEXT,EXTERNAL:PLAINTEXT
+          - name: kafka_INTER_BROKER_LISTENER_NAME
+            value: INTERNAL
+          - name: kafka_ZOOKEEPER_SESSION_TIMEOUT
+            value: "6000"
+          - name: kafka_RESTART_ATTEMPTS
+            value: "10"
+          - name: kafka_RESTART_DELAY
+            value: "5"
+          - name: ZOOKEEPER_AUTOPURGE_PURGE_INTERVAL
+            value: "0"        
+        resources:
+          limits:
+            memory: "512Mi"
+            cpu: "500m"
+          requests:
+            memory: "256Mi"
+            cpu: "250m"           
+        ports:
+        - containerPort: 2181
+          name: "client"
+        - containerPort: 9092
+          name: "server"

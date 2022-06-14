@@ -1,0 +1,21 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: dso-gke-nodejs-ingress-chart
+  labels:
+    name: dso-gke-nodejs-ingress-chart
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /$2
+spec:
+  ingressClassName: nginx
+  rules:
+  - http:
+      paths:
+          - backend:
+              service:
+                name: dso-gke-nodejs-svc-chart
+                port:
+                  number: 80
+            path: /nodejs(/|$)(.*)      
+            pathType: Prefix
+            

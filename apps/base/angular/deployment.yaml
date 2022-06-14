@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: dso-gke-angular
+  labels:
+    name: web
+    app: app-angular
+spec:
+  selector:
+    matchLabels:
+      app: app-angular
+  template:
+    metadata:
+      labels:
+        app: app-angular
+    spec:
+      containers:
+      - name: app-angular
+        image: "europe-west3-docker.pkg.dev/earnest-keep-348414/prueba/loginapp:latest"
+        resources:
+          limits:
+            memory: "128Mi"
+            cpu: "500m"
+        ports:
+        - containerPort: 80

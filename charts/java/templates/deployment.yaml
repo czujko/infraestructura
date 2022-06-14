@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: dp-java-chart
+  labels:
+    app: java-app
+#    app.kubernetes.io/name: dso-gke-java-application
+spec:
+  selector:
+    matchLabels:
+      app: java-app
+  template:
+    metadata:
+      labels:
+        app: java-app
+        app.kubernetes.io/name: dso-gke-java-application
+    spec:
+      containers:
+      - name: java-app
+        image: {{.Values.containers.image}} 
+        env:
+          - name: SPRING_DATASOURCE_URL
+            value: {{.Values.spec.SPRING_DATASOURCE_URL}}
+          - name: SPRING_KAFKA_CONSUMER_BOOTSTRAP_SERVERS
+            value: {{.Values.spec.SPRING_KAFKA_CONSUMER_BOOTSTRAP_SERVERS}}
+          - name: SPRING_KAFKA_PRODUCER_BOOTSTRAP_SERVERS
+            value: {{.Values.spec.SPRING_KAFKA_PRODUCER_BOOTSTRAP_SERVERS}}
+#          - name: SERVER_SERVLET_CONTEXT_PATH
+#            value: "/java"        
+        resources:
+          limits:
+            memory: "512Mi"
+            cpu: "500m"
+        ports:
+        - name: http
+          containerPort: 8080

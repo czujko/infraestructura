@@ -1,0 +1,23 @@
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
+kind: HelmRelease
+metadata:
+  name: java-chart
+  namespace: ns-java-production
+spec:
+  interval: 1m
+  chart:
+    spec:
+      chart: ../../../charts/java/
+      version: 0.1.4
+      sourceRef:
+        kind: GitRepository
+        name: flux-system
+        namespace: flux-system
+      interval: 1m
+  values:
+    spec:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://svc-postgres-chart.ns-postgres-production.svc.cluster.local/db
+      SPRING_KAFKA_CONSUMER_BOOTSTRAP_SERVERS: svc-kafka.ns-kafka-production.svc.cluster.local:9092
+      SPRING_KAFKA_PRODUCER_BOOTSTRAP_SERVERS: svc-kafka.ns-kafka-production.svc.cluster.local:9092        
+    containers:
+      image: "europe-west1-docker.pkg.dev/capable-conduit-348311/app-java/dso.gke.java"

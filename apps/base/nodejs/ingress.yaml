@@ -1,0 +1,19 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: prometheus-dashboard
+
+  labels:
+    name: prometheus-dashboard
+spec:
+  rules:
+    - host: prometheus-dashboard.rancher.localhost
+      http:
+        paths:
+          - pathType: Prefix
+            path: "/"
+            backend:
+              service:
+                name: prometheus-operated
+                port:
+                  number: 9090

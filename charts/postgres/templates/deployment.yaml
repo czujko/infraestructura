@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: dp-postgres-chart
+  labels:
+    app: postgres-app
+spec:
+  selector:
+    matchLabels:
+      app: postgres-app
+  template:
+    metadata:
+      labels:
+        app: postgres-app
+    spec:
+      containers:
+        - name: postgres-app
+          image: {{.Values.containers.image}}
+          ports:
+            - containerPort: 5432
+              name: postgres
+          env:
+            - name: POSTGRES_DB
+              value: "db"
+            - name: POSTGRES_PASSWORD
+              value: "password"
+          resources:
+            limits:
+              memory: "256Mi"
+              cpu: "500m"

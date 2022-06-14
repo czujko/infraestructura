@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: service-app-angular
+  labels:
+    name: service-app-angular
+    app: app-angular
+spec:
+  selector:
+    name: app-angular 
+  type: ClusterIP
+  ports:
+   - name: http
+     port: 80
+     targetPort: 80
+     protocol: TCP

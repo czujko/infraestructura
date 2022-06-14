@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: dso-gke-nodejs
+  labels:
+    name: dso-gke-nodejs
+    app: api-nodejs
+spec:
+  selector:
+    app: dso-gke-nodejs
+  ports:
+  - name: dso-gke-nodejs
+    port: 80
+    targetPort: 9495
+  - name: prometheus
+    port: 9991
+    targetPort: 9991

@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: dp-kafdrop
+  labels:
+    app: kafdrop
+spec:
+  selector:
+    matchLabels:
+      app: kafdrop
+  template:
+    metadata:
+      labels:
+        app: kafdrop
+    spec:
+      containers:
+      - name: kafdrop
+        image: europe-west1-docker.pkg.dev/capable-conduit-348311/app-java/kafdrop
+        env:
+          - name: KAFKA_BROKERCONNECT
+            value: "kafka.dso-gke-java.svc.cluster.local:9092"
+          - name: JVM_OPTS
+            value: "-Xms16M -Xmx48M -Xss180K -XX:-TieredCompilation -XX:+UseStringDeduplication -noverify"
+        resources:
+          limits:
+            memory: "512Mi"
+            cpu: "500m"
+        ports:
+          - containerPort: 9000
+            name: http

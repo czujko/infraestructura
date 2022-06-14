@@ -1,0 +1,34 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: dp-kafdrop
+  labels:
+    app: kafdrop
+spec:
+  selector:
+    matchLabels:
+      app: kafdrop
+  template:
+    metadata:
+      labels:
+        app: kafdrop
+    spec:
+      containers:
+      - name: kafdrop
+        image: obsidiandynamics/kafdrop:latest
+        imagePullPolicy: Always
+        env:
+          - name: KAFKA_BROKERCONNECT
+            value: "svc-kafka.ns-kafka-production.svc.cluster.local:9092"
+          - name: JVM_OPTS
+            value: "-Xms16M -Xmx48M -Xss180K -XX:-TieredCompilation -XX:+UseStringDeduplication -noverify"
+        resources:
+          limits:
+            memory: "512Mi"
+            cpu: "500m"
+          requests:
+            memory: "256Mi"
+            cpu: "250m" 
+        ports:
+          - containerPort: 9000
+            name: http

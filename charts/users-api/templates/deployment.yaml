@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: dso-gke-nodejs-dp-chart
+  labels:
+    name: api-nodejs
+    app: dso-gke-nodejs
+spec:
+  selector:
+    matchLabels:
+      app: dso-gke-nodejs
+  template:
+    metadata:
+      labels:
+        app: dso-gke-nodejs
+    spec:
+      containers:
+      - name: dso-gke-nodejs
+        image: {{.Values.containers.image}}
+        env:
+          - name: "MONGO_CONN"
+            value: {{.Values.spec.MONGO_CONN}}
+        resources:
+          limits:
+            memory: "128Mi"
+            cpu: "500m"
+        ports:
+          - name: http 
+            containerPort: {{.Values.ports.API_PORT}}
+          - name: prom-http
+            containerPort: {{.Values.ports.PROMETHEUS_PORT}}
+        

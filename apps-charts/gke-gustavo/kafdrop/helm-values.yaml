@@ -1,0 +1,19 @@
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
+kind: HelmRelease
+metadata:
+  name: kafdrop-chart
+  namespace: ns-kafdrop-production
+spec:
+  interval: 1m
+  chart:
+    spec:
+      chart: ../../../charts/kafdrop/
+      version: 0.1.3
+      sourceRef:
+        kind: GitRepository
+        name: flux-system
+        namespace: flux-system
+      interval: 1m
+  values:
+    KAFKA_BROKERCONNECT: "svc-kafka.ns-kafka-production.svc.cluster.local:9092"
+    JVM_OPTS: "-Xms16M -Xmx48M -Xss180K -XX:-TieredCompilation -XX:+UseStringDeduplication -noverify"

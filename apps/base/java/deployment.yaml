@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: dp-dso-gke-java
+  labels:
+    app: java-app
+#    app.kubernetes.io/name: dso-gke-java-application
+spec:
+  selector:
+    matchLabels:
+      app: java-app
+  template:
+    metadata:
+      labels:
+        app: java-app
+        app.kubernetes.io/name: dso-gke-java-application
+    spec:
+      containers:
+      - name: java-app
+        image: dso-gke-java/image       
+        resources:
+          limits:
+            memory: "512Mi"
+            cpu: "500m"
+        ports:
+        - name: http
+          containerPort: 8080

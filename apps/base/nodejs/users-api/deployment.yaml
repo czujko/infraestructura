@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: dso-gke-nodejs
+  labels:
+    name: api-nodejs
+    app: dso-gke-nodejs
+spec:
+  selector:
+    matchLabels:
+      app: dso-gke-nodejs
+  template:
+    metadata:
+      labels:
+        app: dso-gke-nodejs
+    spec:
+      containers:
+      - name: dso-gke-nodejs
+        image: europe-west3-docker.pkg.dev/dev-spirit-348311/registro-test/dsonodejs:latest 
+        resources:
+          limits:
+            memory: "128Mi"
+            cpu: "500m"
+        ports:
+          - containerPort: 9495
+          - containerPort: 9991
+        

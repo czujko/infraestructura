@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: dp-dso-gke-postgres  
+  labels:
+    app: postgres-app-production
+spec:
+  selector:
+    matchLabels:
+      app: postgres-app-production
+  template:
+    metadata:
+      labels:
+        app: postgres-app-production
+    spec:
+      containers:
+        - name: postgres-app
+          image: gcr.io/capable-conduit-348311/postgres:latest
+          ports:
+            - containerPort: 5432
+              name: postgres
+          # TODO: place env on patch
+          env:
+            - name: POSTGRES_PASSWORD
+              value: "password"
+            - name: POSTGRES_DB
+              value: "db"
+          resources:
+            limits:
+              memory: "256Mi"
+              cpu: "500m"

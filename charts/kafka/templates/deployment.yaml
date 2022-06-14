@@ -1,0 +1,46 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: dp-kafka-chart
+spec:
+  selector:
+    matchLabels:
+      app: kafka
+  template:
+    metadata:
+      labels:
+        app: kafka
+    spec:
+      containers:
+        - name: kafka
+          image: obsidiandynamics/kafka
+          env:
+            - name: KAFKA_POD_IP
+              valueFrom:
+                fieldRef:
+                  fieldPath: status.podIP
+            - name: KAFKA_LISTENERS
+              value: "{{ .Values.KAFKA_LISTENERS }}"
+            - name: KAFKA_ADVERTISED_LISTENERS
+              value: INTERNAL://$(KAFKA_POD_IP):29092,{{ .Values.KAFKA_ADVERTISED_LISTENERS }}
+            - name: KAFKA_LISTENER_SECURITY_PROTOCOL_MAP
+              value: {{ .Values.KAFKA_LISTENER_SECURITY_PROTOCOL_MAP }}
+            - name: KAFKA_INTER_BROKER_LISTENER_NAME
+              value: {{ .Values.KAFKA_INTER_BROKER_LISTENER_NAME }}
+            - name: KAFKA_ZOOKEEPER_SESSION_TIMEOUT
+              value: "{{ .Values.KAFKA_ZOOKEEPER_SESSION_TIMEOUT }}"
+            - name: KAFKA_RESTART_ATTEMPTS
+              value: "{{ .Values.KAFKA_RESTART_ATTEMPTS }}"
+            - name: KAFKA_RESTART_DELAY
+              value: "{{ .Values.KAFKA_RESTART_DELAY }}"
+            - name: ZOOKEEPER_AUTOPURGE_PURGE_INTERVAL
+              value: "{{ .Values.ZOOKEEPER_AUTOPURGE_PURGE_INTERVAL }}"
+          resources:
+            limits:
+              memory: "512Mi"
+              cpu: "500m"
+          ports:
+            - containerPort: {{ .Values.ports.client.containerPort}}
+              name: "{{ .Values.ports.client.name}}"
+            - containerPort: {{ .Values.ports.server.containerPort}}
+              name: "{{ .Values.ports.server.name}}"

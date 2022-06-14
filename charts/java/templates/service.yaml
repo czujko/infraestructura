@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: svc-java
+  labels:
+    app: java-app
+    name: svc-java
+#    app.kubernetes.io/name: dso-gke-java
+spec:
+  selector:
+    app: java-app
+  ports:
+  - name: http
+    port: 80
+    targetPort: 8080

@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: dp-angular-chart
+  labels:
+    name: web
+    app: app-angular
+spec:
+  selector:
+    matchLabels:
+      app: app-angular
+  template:
+    metadata:
+      labels:
+        app: app-angular
+    spec:
+      containers:
+      - name: app-angular
+        image: {{.Values.containers.image}}
+        resources:
+          limits:
+            memory: "128Mi"
+            cpu: "500m"
+        ports:
+        - containerPort: {{.Values.ports.containerPort}}

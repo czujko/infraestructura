@@ -1,0 +1,21 @@
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: dso-aws-nodejs
+  namespace: default
+  labels:
+    app: dso-aws-nodejs
+    app.kubernetes.io/name: dso-aws-nodejs
+    prometheus: monitoring
+spec:
+  endpoints:
+    - port: prometheus
+      path: /metrics
+      honorLabels: false
+  jobLabel: dso-aws-nodejs
+  namespaceSelector:
+    matchNames:
+      - default
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: dso-aws-nodejs

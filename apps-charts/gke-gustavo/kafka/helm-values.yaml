@@ -1,0 +1,35 @@
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
+kind: HelmRelease
+metadata:
+  name: kafka-chart
+  namespace: ns-kafka-production
+spec:
+  interval: 1m
+  chart:
+    spec:
+      chart: ../../../charts/kafka/
+      version: 0.1.0
+      sourceRef:
+        kind: GitRepository
+        name: flux-system
+        namespace: flux-system
+      interval: 1m
+  values:
+    KAFKA_LISTENERS: "INTERNAL://:29092,EXTERNAL://:9092"
+    KAFKA_ADVERTISED_LISTENERS: EXTERNAL://svc-kafka.ns-kafka-production.svc.cluster.local:9092
+    KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: "INTERNAL:PLAINTEXT,EXTERNAL:PLAINTEXT"
+    KAFKA_INTER_BROKER_LISTENER_NAME: "INTERNAL"
+    KAFKA_ZOOKEEPER_SESSION_TIMEOUT: "6000"
+    KAFKA_RESTART_ATTEMPTS: "10"
+    KAFKA_RESTART_DELAY: "5"
+    ZOOKEEPER_AUTOPURGE_PURGE_INTERVAL: "0"
+    ports:
+      client:
+        name: "client"
+        containerPort: "2181"
+      server:
+        name: "server"
+        containerPort: "9092"
+    service:
+      type: ClusterIP
+      port: 80

@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: svc-kafdrop
+  labels:
+    app: kafdrop-production
+    name: svc-kafdrop
+spec:
+  selector:
+    app: kafdrop-production
+  ports:
+  - port: 80
+    targetPort: http

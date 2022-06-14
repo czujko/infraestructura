@@ -1,0 +1,6 @@
+apiVersion: v2
+name: angular-chart
+description: A Helm chart for angular App
+type: application
+version: 0.1.3
+appVersion: "0.0.2"

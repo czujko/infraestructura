@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: dp-dso-gke-java
+  labels:
+    app: java-app
+spec:
+  selector:
+    matchLabels:
+      app: java-app
+  template:
+    metadata:
+      labels:
+        app: java-app
+        app.kubernetes.io/name: java-app
+    spec:
+      containers:
+      - name: java-app
+        image: europe-west1-docker.pkg.dev/capable-conduit-348311/app-java/dso.gke.java:latest
+        env:
+          - name: SPRING_DATASOURCE_URL
+            value: jdbc:postgresql://svc-dso-gke-postgres.ns-postgres-production.svc.cluster.local/db
+          - name: SPRING_KAFKA_CONSUMER_BOOTSTRAP_SERVERS
+            value: svc-kafka.ns-kafka-production.svc.cluster.local:9092
+          - name: SPRING_KAFKA_PRODUCER_BOOTSTRAP_SERVERS
+            value: svc-kafka.ns-kafka-production.svc.cluster.local:9092        
